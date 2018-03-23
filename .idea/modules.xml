@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ViewModelAnnotationsKt.iml" filepath="$PROJECT_DIR$/ViewModelAnnotationsKt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vmannotation/vmannotation.iml" filepath="$PROJECT_DIR$/vmannotation/vmannotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vmannotationprocessor/vmannotationprocessor.iml" filepath="$PROJECT_DIR$/vmannotationprocessor/vmannotationprocessor.iml" />
+    </modules>
+  </component>
+</project>
