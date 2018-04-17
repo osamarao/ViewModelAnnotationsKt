@@ -16,9 +16,6 @@ abstract class BaseViewHolder<T>(val itemViewHere: View) : RecyclerView.ViewHold
 class MainItemViewHolder(itemView: View) : BaseViewHolder<AKindOfObject>(itemView) {
     @BindField(viewIds = ["name", "amount"], viewName = "itemViewHere")
     override fun bind(item: AKindOfObject) {
-        super.bind(item)
-//        itemViewHere.findViewById<TextView>(R.id.name).text = item.name
-//        itemViewHere.findViewById<TextView>(R.id.amount).text = item.amount
         bindFields(item, itemViewHere)
     }
 }

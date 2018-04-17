@@ -1,17 +1,14 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "me.osama.viewmodelannotationskt"
         minSdkVersion 17
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -37,11 +34,12 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compileOnly project(path: ':annotation')
+    kapt project(':processor')
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    api 'com.android.support:recyclerview-v7:26.1.0'
-    compileOnly project(path: ':vmannotation')
-    kapt project(':vmannotationprocessor')
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+
 }

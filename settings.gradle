@@ -1,1 +1,1 @@
-include ':app', ':vmannotation', ':vmannotationprocessor'
+include ':sample', ':annotation', ':processor'
