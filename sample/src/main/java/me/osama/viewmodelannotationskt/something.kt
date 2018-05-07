@@ -1,3 +1,0 @@
-fun sayHello() {
-    print("hello")
-}

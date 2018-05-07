@@ -21,8 +21,8 @@ class BindFieldsProcessor : AbstractProcessor() {
         const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
     }
 
-    override fun process(annotations: MutableSet<out TypeElement>?, roundEnv: RoundEnvironment?): Boolean {
-        roundEnv?.getElementsAnnotatedWith(BindField::class.java)?.forEach { methodElement ->
+    override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
+        roundEnv.getElementsAnnotatedWith(BindField::class.java).forEach { methodElement ->
             if (methodElement.kind != ElementKind.METHOD) {
                 processingEnv.messager.errormessage { "Can only be applied to functions,  element: $methodElement " }
                 return false
@@ -37,18 +37,20 @@ class BindFieldsProcessor : AbstractProcessor() {
     }
 
     private fun generateNewMethod(method: ExecutableElement, variable: VariableElement, packageOfMethod: String) {
-        val kaptKotlinGeneratedDir = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME]
-                ?: run {
-                    processingEnv.messager.errormessage { "Can't find the target directory for generated Kotlin files." }
-                }
+        val generatedSourcesRoot: String = processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME].orEmpty()
+        if(generatedSourcesRoot.isEmpty()) {
+            processingEnv.messager.errormessage { "Can't find the target directory for generated Kotlin files." }
+            return
+        }
 
-        val variableAsElement = processingEnv.typeUtils?.asElement(variable.asType())
-        val fieldsInArgument = ElementFilter.fieldsIn(variableAsElement?.enclosedElements)
+        val variableAsElement = processingEnv.typeUtils.asElement(variable.asType())
+        val fieldsInArgument = ElementFilter.fieldsIn(variableAsElement.enclosedElements)
         val annotationArgs = method.getAnnotation(BindField::class.java).viewIds
+
 
         val funcBuilder = FunSpec.builder("bindFields")
                 .addModifiers(KModifier.PUBLIC)
-                .addParameter(variable.simpleName.toString(), variableAsElement?.asType()?.asTypeName()!!)
+                .addParameter(variable.simpleName.toString(), variableAsElement.asType().asTypeName())
                 .addParameter(method.getAnnotation(BindField::class.java).viewName, ClassName("android.view", "View"))
 
         annotationArgs.forEachIndexed { index, viewId ->
@@ -61,7 +63,7 @@ class BindFieldsProcessor : AbstractProcessor() {
                     fieldsInArgument[index].simpleName
             )
         }
-        val file = File(kaptKotlinGeneratedDir as String)
+        val file = File(generatedSourcesRoot)
         file.mkdir()
         FileSpec.builder(packageOfMethod, "BindFieldsGenerated").addFunction(funcBuilder.build()).build().writeTo(file)
     }
